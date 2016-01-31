@@ -5,6 +5,8 @@ module Poker
     include Enumerable
     include Comparable
 
+    attr_reader :cards
+
     def self.best(cards)
       best = nil
       cards.combination(5).each do |c|
@@ -27,7 +29,7 @@ module Poker
     end
 
     def value
-      HandEval.eval(*(@cards.map { |c| c.value }))
+      HandEval.eval(*(cards.map { |c| c.value }))
     end
 
     def rank
@@ -49,15 +51,15 @@ module Poker
     end
 
     def [](index)
-      @cards[index]
+      cards[index]
     end
 
     def each(&block)
-      @cards.each(&block)
+      cards.each(&block)
     end
 
     def size
-      @cards.size
+      cards.size
     end
 
     def to_s
@@ -80,13 +82,13 @@ module Poker
 
     def pairs_to_s
       r = rank
-      h = @cards.inject({}) { |h, c|
+      h = cards.inject({}) { |h, c|
         r = c.rank_value + 1
         h[r] = h[r] ? h[r] + 1 : 1
         h
       }
 
-      @cards.sort_by { |c|
+      cards.sort_by { |c|
         if h[c.rank_value + 1] > 0
           - ((h[c.rank_value + 1] * 10_000) + (c.rank_value + 1) * 100) +
             c.suit_value
@@ -97,7 +99,7 @@ module Poker
     end
 
     def straights_to_s
-      @cards.sort_by { |c|
+      cards.sort_by { |c|
         if c.rank_value == 12
           10_000
         else
@@ -107,7 +109,7 @@ module Poker
     end
 
     def high_card_to_s
-      @cards.sort_by { |c| - (c.rank_value + 1) * 100 - c.suit_value }.
+      cards.sort_by { |c| - (c.rank_value + 1) * 100 - c.suit_value }.
         join(" ")
     end
   end
