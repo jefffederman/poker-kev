@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-
+require 'pry'
 
 if ENV['COVERAGE'] == 'true'
   require 'simplecov'
